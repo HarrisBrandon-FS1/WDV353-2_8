@@ -1,0 +1,438 @@
+{
+	"info": {
+		"_postman_id": "8d3b73ec-cb80-4388-bd6d-1acc2f9d44cb",
+		"name": "Dex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38109047"
+	},
+	"item": [
+		{
+			"name": "Trainers",
+			"item": [
+				{
+					"name": "Create Trainer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 (Created)\", function (){",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Respone has created resource ID\", function () {",
+									"    const responseBody = pm.response.json();",
+									"    pm.expect(responseBody.data).to.have.property(\"_id\").that.is.not.null;",
+									"    pm.expect(responseBody.data._id).to.have.lengthOf(24);",
+									"",
+									"    pm.collectionVariables.set(\"leaderId\", responseBody.data._id);",
+									"})",
+									"",
+									"pm.test(\"The response has all properties\", () => {",
+									"",
+									"    const responseBody = pm.response.json();",
+									"    const { data } = responseBody;",
+									"    pm.expect(data.name).to.be.a('string');",
+									"    pm.expect(data.name).to.equal(\"Lisa\");",
+									"    pm.expect(data.gymNumber).to.eql(290);",
+									"    pm.expect(data.gymNumber).to.be.a('number');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"leader\":{\n    \"name\" : \"Lisa\",\n    \"type\" : \"Water\",\n    \"gymNumber\" : \"290\",\n    \"description\": \"The Second gym leader in the Kanto region\"\n\n}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/leaders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"leaders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Trainers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should be okay to process and have data property\", function () {",
+									"    pm.response.to.not.be.error;",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"    pm.response.to.not.have.jsonBody(\"error\");",
+									"    pm.expect(pm.response.json()).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/leaders/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"leaders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trainer By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should be okay to process and have data property\", function () {",
+									"    pm.response.to.not.be.error;",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"    pm.response.to.not.have.jsonBody(\"error\");",
+									"    pm.expect(pm.response.json()).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The response has all properties\", () => {",
+									"",
+									"    const responseBody = pm.response.json();",
+									"    const { data } = responseBody;",
+									"    pm.expect(data.name).to.be.a('string');",
+									"    pm.expect(data.name).to.equal(\"Lisa\");",
+									"    pm.expect(data.gymNumber).to.eql(290);",
+									"    pm.expect(data.gymNumber).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/leaders/{{leaderId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"leaders",
+								"{{leaderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trainer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should be okay to process and have data property\", function () {",
+									"    pm.response.to.not.be.error;",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"    pm.response.to.not.have.jsonBody(\"error\");",
+									"    pm.expect(pm.response.json()).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The response has all properties\", () => {",
+									"",
+									"    const responseBody = pm.response.json();",
+									"    const { data } = responseBody;",
+									"    pm.expect(data.description).to.be.a('string');",
+									"    pm.expect(data.gymNumber).to.eql(290);",
+									"    pm.expect(data.gymNumber).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Gloria\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/leaders/{{leaderId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"leaders",
+								"{{leaderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Trainer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should be okay to process and have data property\", function () {",
+									"    pm.response.to.not.be.error;",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"    pm.response.to.not.have.jsonBody(\"error\");",
+									"    pm.expect(pm.response.json()).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"The response has all properties\", () => {",
+									"",
+									"    const responseBody = pm.response.json();",
+									"    const { data } = responseBody;",
+									"    pm.expect(data.type).to.be.a('array');",
+									"    pm.expect(data.gymNumber).to.eql(290);",
+									"    pm.expect(data.gymNumber).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/leaders/{{leaderId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"leaders",
+								"{{leaderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pokemon",
+			"item": [
+				{
+					"name": "Create Pokemon",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"author\": {\n    \"name\" : \"Jack Carr\",\n    \"age\": \"35\",\n    \"email\": \"ryan@dailystoic.com\",\n    \"description\": \"Its an author\"\n\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/pokemon",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"pokemon"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pokemon",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Ryan Holiday\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/pokemon/6715b7164e854cd17cefda0b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"pokemon",
+								"6715b7164e854cd17cefda0b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pokemon",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/pokemon/6715bf073441be5b822aa367",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"pokemon",
+								"6715bf073441be5b822aa367"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Pokemon",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/pokemon/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"pokemon",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pokemon By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/pokemon/6715bf063441be5b822aa365",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"pokemon",
+								"6715bf063441be5b822aa365"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "leaderId",
+			"value": ""
+		}
+	]
+}
