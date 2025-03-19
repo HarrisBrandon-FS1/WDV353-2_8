@@ -36,13 +36,23 @@ const getAllPokes = async (req, res) => {
 
 const getPokeById = async (req, res) => {
     const {id} = req.params;
-    const poke = await Pokes.findById(id);
-    res.status(200).json({
-        data: poke,
-        success: true,
-        message: `${req.method} - request to Pokemon endpoint`,
+    const poke = await Pokes.findById(id).select("name _id")
+    .populate("poke", "leader")
+    .exec()
+    .then(author => {
+        if(!leader) {
+            console.log(leader);
+            return res.status(404).json({
+                message: `${req.method} - request to Pokemon endpoint`,
+            });
+        }
     });
-};
+    //res.status(200).json({
+      //  data: poke,
+        //success: true,
+        //message: `${req.method} - request to Pokemon endpoint`,
+    //});
+//};
 const createPoke = async (req, res) =>{
     try{
         const { poke } = req.body;
