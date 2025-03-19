@@ -41,6 +41,10 @@ const pokeSchema = new mongoose.Schema({
         required: [true, "Please add a description"],
         maxlength: [500, "Description cannot be over 500 characters"],
     },
+    leader: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Leader',
+    },
 },
 {timestamps: true}
 );

@@ -42,8 +42,14 @@ const leaderSchema = new mongoose.Schema({
         required: [true, "Please add a description"],
         maxlength: [500, "Description cannot be over 500 characters"],
     },
+    pokes:[
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pokemon',
+    },
+    ],
 },
 {timestamps: true}
 );
 
-module.exports = mongoose.model('Leaders', leaderSchema);
+module.exports = mongoose.model('Leader', leaderSchema);

@@ -43,29 +43,57 @@ const getPokeById = async (req, res) => {
         message: `${req.method} - request to Pokemon endpoint`,
     });
 };
-
-const createPoke = async (req, res) => {
-    const {poke} = req.body;
+const createPoke = async (req, res) =>{
     try{
-        const newPoke = await Pokes.create(poke);
-   console.log("data >>>", newPoke);
-    res.status(200).json({
-        data: newPoke,
-        success: true,
-        message: `${req.method} - request to Pokemon endpoint`,
-    });
+        const { poke } = req.body;
+        const user = await Leader.findById(book.leader);
+        book.leader = user;
+        const pokeData = new Poke(poke);
+        user.pokes.push(pokeData._id);
+        const queries = [pokeData.save(), user.save()];
+        await Promise.all(queries);
 
-    }catch(error){
-        if(error.name == "ValidationError") {
-            console.error("Error Validating!", error);
-            res.status(422).json(error);
-        }else{
-            console.error(error);
-            res.status(500).json(error);
-        }
-    }
-   
+        res.status(200).json({
+            data: pokeData,
+            success: true,
+            message: `${req.method} - Poke request made`
+        })
+
+      }catch(error){
+          if(error.name == "ValidationError") {
+              console.error("Error Validating!", error);
+              res.status(422).json(error);
+          }else{
+              console.error(error);
+              res.status(500).json(error);
+          }
+      
 };
+
+
+
+//const createPoke = async (req, res) => {
+  //  const {poke} = req.body;
+    //try{
+      //  const newPoke = await Pokes.create(poke);
+   //console.log("data >>>", newPoke);
+    //res.status(200).json({
+      //  data: newPoke,
+        //success: true,
+        //message: `${req.method} - request to Pokemon endpoint`,
+    //});
+
+    //}catch(error){
+      //  if(error.name == "ValidationError") {
+        //    console.error("Error Validating!", error);
+          //  res.status(422).json(error);
+        //}else{
+          //  console.error(error);
+            //res.status(500).json(error);
+        //}
+    //}
+   
+//};
 
 const updatePoke = async (req, res) => {
     const {id} = req.params;
